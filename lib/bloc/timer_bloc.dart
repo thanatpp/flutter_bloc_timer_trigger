@@ -39,7 +39,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     final end = DateTime.parse(event.end);
     final duration = end.difference(start);
 
-    emit(state.timerInProgress(duration.inSeconds));
+    add(TimerTicked(duration: duration.inSeconds));
     _setTimer(duration);
   }
 
@@ -81,7 +81,9 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     TimerCallApi event,
     Emitter<TimerState> emit,
   ) async {
-    await _fakeRepository.fetchData();
+    if (event.duration > 0) {
+      await _fakeRepository.fetchData();
+    }
   }
 
   void _clearTimer() {

@@ -35,12 +35,23 @@ void main() {
             period: anyNamed("period"),
             ticks: anyNamed("ticks"),
           )).thenAnswer((invocation) {
-            return Stream<int>.value(9);
+            return Stream<int>.value(189);
           });
 
           bloc.add(const TimerStarted(start: '2024-11-20T15:50:15', end: '2024-11-20T15:53:25'));
         },
         expect: () => [
+          expectedState
+              .having(
+                (state) => state.status,
+            'status should be timerInProgress',
+            TimerStatus.timerInProgress,
+          )
+              .having(
+                (state) => state.duration,
+            'duration should be 190',
+            190,
+          ),
           expectedState
               .having(
                 (state) => state.status,
@@ -50,7 +61,7 @@ void main() {
               .having(
                 (state) => state.duration,
                 'duration should be 9',
-                9,
+                189,
               )
         ],
         verify: (bloc) {
